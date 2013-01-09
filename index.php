@@ -64,7 +64,11 @@ require("conn.php");
                     $("#longitude").val(lng);
                     $.get("http://www.motojunkyard.com/scriptor/gpsthoughts/pull.php?latitude="+lat+"&longitude="+lng, function(data){
                         if(data){
-                            $("#error").html("You are located in <b>" + data + "</b>");
+                            value = data.split("|");
+                            if(value[1]){
+                                value[1]= "There are a total of "+value[1]+" thoughts in your area!";
+                            }
+                            $("#error").html("You are located in <b>" + value[0] + "</b> " + value[1]);
                             $("#error").show();                    
                         }
                     });

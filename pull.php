@@ -12,7 +12,13 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
 
         $query = mysqli_query($conn,$q);
         while ($row = mysqli_fetch_assoc($query)) {
-            echo ucwords(strtolower($row["city"])) . ", " . $row["state"];
+            
+            //check for near thoughts
+            $stringQuery="select round(SQRT(POW(69.1 * (a.latitude - $formValue[latitude]), 2) + POW(69.1 * (a.longitude-$formValue[longitude]) * COS(a.latitude / 57.3), 2))) AS distance from gpsthoughts a having distance < 10 limit 100";
+            $queryu=mysqli_query($conn,$stringQuery);
+            $result=  mysqli_fetch_assoc($queryu);
+           
+            echo ucwords(strtolower($row["city"])) . ", " . $row["state"]."|".@mysqli_num_rows($queryu);
         }
     }
 }
