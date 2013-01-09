@@ -1,0 +1,20 @@
+* {margin:0;padding:0;}
+
+html, body {background:lightblue;}
+
+header {background:#333;color:#fff;padding:2.5%;text-align:center;}
+
+section#main {
+	background:#fff;
+	border-radius:12px;
+	margin:2.5% 25%;
+	padding:2.5%;
+	width:50%;
+}
+
+form label {display:block;margin:20px 0 5px;width:100%;}
+form input {margin:5px 0 25px;padding:2.5%;width:95%;}
+form textarea {padding:2.5%;width:95%;}
+form button {display:block;padding:2.5%;width:100%;}
+
+footer {background:#333;color:#fff;bottom:0;padding:2.5%;position:fixed;text-align:center;width:100%;}
