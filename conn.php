@@ -2,12 +2,12 @@
 
 #database
 $dbhost = 'localhost';
-$dbuser = 'motojunkyard_sql';
-$dbpass = '';
+$dbuser = 'gpsthoughts';
+$dbpass = 'gpsthoughts';
 $tryTimes=0;
 mysql:
-$conn = new mysqli($dbhost, $dbuser, $dbpass, "gpsthoughts");;
-if ($conn->connect_errno&&$tryTimes<3) {
+$conn = mysqli_connect($dbhost, $dbuser, $dbpass, "gpsthoughts");
+if (mysqli_connect_errno()&&$tryTimes<3) {
     $tryTimes++;
     goto mysql;
 }

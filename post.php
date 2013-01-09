@@ -6,7 +6,7 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
     if (isset($_GET["thought"]) && isset($_GET["category"]) && isset($_GET["latitude"]) && isset($_GET["longitude"])) {
 
         foreach ($_GET as $key => &$value) {
-            $formValue[$key] = $conn->real_escape_string(trim(urldecode($value)));
+            $formValue[$key] = mysqli_real_escape_string($conn,trim(urldecode($value)));
         }
 
         //max 150chars per thought;
@@ -23,10 +23,9 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
         //todo check strlen
         if (is_numeric($formValue["latitude"]) && is_numeric($formValue["longitude"])) {
             //do add to db query
-            $conn->query("insert into gpsthoughts (thought, category,latitude,longitude) 
+            mysqli_query($conn,"insert into gpsthoughts (thought, category,latitude,longitude) 
                                 values ('$thought','$categoryID','$formValue[latitude]','$formValue[longitude]')");
-            
-            echo $conn->error;
+            echo "posted!"; //do something go to map?
         }
     }
 }

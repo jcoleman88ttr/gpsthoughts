@@ -1,3 +1,6 @@
+<?
+require("conn.php");
+?>
 <!DOCTYPE html>
 <html>
     <head>
@@ -11,11 +14,18 @@
         </header>
 
         <section id="main">
+            <div id="error" style="display:none">Could not locate your coordinates!</div>
             <form id="thought-form" action="post.php">
                 <label for="thought">Thought</label>
                 <textarea name="thought" id="thought"></textarea>
                 <label for="category">Category</label>
-                <input type="text" name="category" id="category" />
+                <select name="category" id="category">
+                    <?
+                    foreach($thoughtCategories as $value){
+                        echo "<option value=\"$value\">$value</option>";
+                    }
+                    ?>
+                </select>
                 <input type="hidden" name="latitude" value="39.9522" id="latitude" />
                 <input type="hidden" name="longitude" value="75.1642" id="longitude" />
                 <button id="submitThought">Pin Thought</button>
@@ -29,35 +39,40 @@
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                if (navigator.geolocation) 
-                {
-                    navigator.geolocation.getCurrentPosition( 
-				 
-                    function (position) { 
-                        mapServiceProvider(position.coords.latitude,position.coords.longitude);
-                    }, 
-                    // next function is the error callback
-                    function (error)
-                    {
-                        switch(error.code) 
-                        {
-                            case error.TIMEOUT:
-                                alert ('Timeout');
-                                break;
-                            case error.POSITION_UNAVAILABLE:
-                                alert ('Position unavailable');
-                                break;
-                            case error.PERMISSION_DENIED:
-                                alert ('Permission denied');
-                                break;
-                            case error.UNKNOWN_ERROR:
-                                alert ('Unknown error');
-                                break;
+                function geoloc(success, fail){
+                    var is_echo = false;
+                    if(navigator && navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                        function(pos) {
+                            if (is_echo){ return; }
+                            is_echo = true;
+                            success(pos.coords.latitude,pos.coords.longitude);
+                        }, 
+                        function() {
+                            if (is_echo){ return; }
+                            is_echo = true;
+                            fail();
                         }
+                    );
+                    } else {
+                        fail();
                     }
-                );
                 }
-				
+
+                function success(lat, lng){
+                    $("#latitude").val(lat);
+                    $("#longitude").val(lng);
+                    $.get("http://www.motojunkyard.com/scriptor/gpsthoughts/pull.php?latitude="+lat+"&longitude="+lng, function(data){
+                        if(data){
+                            $("#error").html("You are located in <b>" + data + "</b>");
+                            $("#error").show();                    
+                        }
+                    });
+                }
+                function fail(){
+                    $("#error").show();
+                }
+                geoloc(success, fail);
             });
         </script>
     </body>
