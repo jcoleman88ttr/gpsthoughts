@@ -15,17 +15,11 @@ require("conn.php");
 
         <section id="main">
             <div id="error" style="display:none">Could not locate your coordinates!</div>
-            <form id="thought-form" action="post.php">
+            <form id="thought-form" action="post.php" autocomplete="off">
                 <label for="thought">Thought</label>
                 <textarea name="thought" id="thought"></textarea>
                 <label for="category">Category</label>
-                <select name="category" id="category">
-                    <?
-                    foreach($thoughtCategories as $value){
-                        echo "<option value=\"$value\">$value</option>";
-                    }
-                    ?>
-                </select>
+                <input name="category" id="category" type="text">
                 <input type="hidden" name="latitude" value="39.9522" id="latitude" />
                 <input type="hidden" name="longitude" value="75.1642" id="longitude" />
                 <button id="submitThought">Pin Thought</button>
@@ -37,8 +31,16 @@ require("conn.php");
         </footer>
 
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script src="http://www.motojunkyard.com/scriptor/gpsthoughts/css/jquery.autocomplete.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
+                
+                $("#category").autocomplete({
+                    url : 'http://www.motojunkyard.com/scriptor/gpsthoughts/post.php',
+                    maxItemsToShow: 5,
+                    useCache: false
+                });
+
                 function geoloc(success, fail){
                     var is_echo = false;
                     if(navigator && navigator.geolocation) {
