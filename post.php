@@ -13,7 +13,7 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
     if(isset($formValue["q"])){
         $q=$formValue["q"];
         if(strlen($q)>=3){
-            $query=mysqli_query($conn,"select category from gpsthoughts where category like '%$q%' limit 10") or die(mysqli_error($conn));
+            $query=mysqli_query($conn,"select category from gpsthoughts where category like '%$q%' group by category limit 10") or die(mysqli_error($conn));
             while($row=mysqli_fetch_assoc($query)){
                 echo $row["category"]."|\n";
             }

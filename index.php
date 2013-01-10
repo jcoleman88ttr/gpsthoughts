@@ -19,7 +19,7 @@ require("conn.php");
                 <label for="thought">Thought</label>
                 <textarea name="thought" id="thought"></textarea>
                 <label for="category">Category</label>
-                <input name="category" id="category" type="text">
+                <input name="category" id="category" class="category" type="text">
                 <input type="hidden" name="latitude" value="39.9522" id="latitude" />
                 <input type="hidden" name="longitude" value="75.1642" id="longitude" />
                 <button id="submitThought">Pin Thought</button>
@@ -34,10 +34,9 @@ require("conn.php");
         <script src="http://www.motojunkyard.com/scriptor/gpsthoughts/css/jquery.autocomplete.js"></script>
         <script type="text/javascript">
             $(document).ready(function() {
-                
                 $("#category").autocomplete({
-                    url : 'http://www.motojunkyard.com/scriptor/gpsthoughts/post.php',
-                    maxItemsToShow: 5,
+                    url : 'http://www.motojunkyard.com/scriptor/gpsthoughts/post.php?type=autocomplete',
+                    maxItemsToShow: 10,
                     useCache: false
                 });
 
@@ -64,7 +63,7 @@ require("conn.php");
                 function success(lat, lng){
                     $("#latitude").val(lat);
                     $("#longitude").val(lng);
-                    $.get("http://www.motojunkyard.com/scriptor/gpsthoughts/pull.php?latitude="+lat+"&longitude="+lng, function(data){
+                    $.get("http://www.motojunkyard.com/scriptor/gpsthoughts/pull.php?type=getCity&latitude="+lat+"&longitude="+lng, function(data){
                         if(data){
                             value = data.split("|");
                             if(value[1]){
