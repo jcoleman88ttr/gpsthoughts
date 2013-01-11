@@ -1,26 +1,48 @@
 * {margin:0;padding:0;}
 
-html, body {background:lightblue;}
+html, body {background:lightblue;font-family: 'Oswald', arial, serif;}
 
 header {background:#333;color:#fff;padding:2.5%;text-align:center;}
-
-section#main {
-	background:#fff;
-	border-radius:12px;
-	margin:2.5% 25%;
+header h1 a {color:#fff;font-size:.8em;text-align:center;text-decoration:none;text-transform:uppercase;}
+section#alert {
+	background:orange;
+	border-radius:4px;
+	font-weight:bold;
+	margin:5% 5%;
 	padding:2.5%;
-	width:50%;
+	width:85%;
+	text-align:center;
+}
+
+section#main, section#register, section#login {
+	background:#fff;
+	border-radius:4px;
+	margin:2.5% 5%;
+	padding:5%;
+	width:80%;
+}
+section#register, section#login {display:none;}
+
+section#adblock {
+	background:#333;
+	border-radius:0px;
+	margin:2.5% 5% 5%;
+	padding:2.5%;
+	width:85%;
 }
 
 
 
 form label {display:block;margin:20px 0 5px;width:100%;}
-form input {margin:5px 0 25px;padding:2.5%;width:95%; font-size: 20px;}
-form textarea {padding:2.5%;width:95%;}
-form button {display:block;padding:2.5%;width:100%;}
+form input[type=text], form input[type=password] {margin:5px 0 25px;padding:2.5%;width:95%; font-size: 18px;}
+form textarea {padding:2.5%;width:95%;font-size: 18px;font-weight:bold;}
+form button {display:block;padding:5%;width:100%;}
 
-footer {background:#333;color:#fff;bottom:0;padding:2.5%;position:fixed;text-align:center;width:100%;}
-
+footer {background:#333;color:#fff;bottom:0;padding:5% 2.5%;position:fixed;text-align:center;width:95%;}
+footer nav ul {list-style-type:none;}
+footer nav ul li {float:left;width:50%;text-align:center;}
+footer nav ul li a {color:#fff;text-decoration:none;text-transform:uppercase;}
+footer nav ul li a:hover {text-decoration:underline;}
 
 
 /*

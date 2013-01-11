@@ -20,7 +20,7 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
                 //check for near thoughts
                 $stringQuery = "select round(SQRT(POW(69.1 * (a.latitude - $formValue[latitude]), 2) + POW(69.1 * (a.longitude-$formValue[longitude]) * COS(a.latitude / 57.3), 2))) AS distance from gpsthoughts a having distance < 10 limit 100";
                 $queryu = mysqli_query($conn, $stringQuery);
-                $result = mysqli_fetch_assoc($queryu);
+                //$result = mysqli_fetch_assoc($queryu);
 
                 echo ucwords(strtolower($row["city"])) . ", " . $row["state"] . "|" . @mysqli_num_rows($queryu);
             }
@@ -28,7 +28,15 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
 
         //populate google maps sql
         if ($formValue["type"] == "populateMap") {
-            $queryText="select a.latitude, a.longitude, a.thought, a.category, round(SQRT(POW(69.1 * (a.latitude - $formValue[latitude]), 2) + POW(69.1 * (a.longitude-$formValue[longitude]) * COS(a.latitude / 57.3), 2))) AS distance from gpsthoughts a group by a.latitude, a.longitude having distance < 10 limit 100";
+            if(isset($_SESSION["login"])){
+                $sqlLoggedin = " and ((a.userid='".$_SESSION["userid"]."' and a.visibility='false') or (a.visibility='true'))";
+            }else{
+                $sqlLoggedin = " and a.visibility='true'";
+            }
+            $queryText="select a.latitude, a.longitude, a.thought, a.category, b.username, 
+                round(SQRT(POW(69.1 * (a.latitude - $formValue[latitude]), 2) + 
+                POW(69.1 * (a.longitude-$formValue[longitude]) * COS(a.latitude / 57.3), 2))) AS distance 
+                from gpsthoughts a, users  b where a.userid = b.userid $sqlLoggedin having distance < 10 limit 100";
             $query = mysqli_query($conn, $queryText) or die(mysqli_error($conn));
 
             function parseToXML($htmlStr) {
@@ -46,10 +54,11 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
             while ($row = mysqli_fetch_assoc($query)) {
                 echo '<marker ';
                 echo 'name="' . parseToXML($row['category']) . '" ';
-                echo 'address="' . parseToXML($row['thought']) . '" ';
+                echo "address=\"" . parseToXML($row['thought'])."\" ";
+                echo "username=\"" . parseToXML($row['username'])."\" ";
                 echo 'lat="' . $row['latitude'] . '" ';
                 echo 'lng="' . $row['longitude'] . '" ';
-                echo 'type="" ';
+                echo 'type="restaurant" ';
                 echo '/>';
             }
             echo '</markers>';

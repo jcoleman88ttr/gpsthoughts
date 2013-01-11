@@ -1,6 +1,6 @@
 <?
+require("conn.php");
 if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.com\/(.*)/i', $_SERVER["HTTP_REFERER"])) {
-    require("conn.php");
 
     foreach ($_GET as $key => &$value) {
         $value=trim($value);
@@ -19,19 +19,25 @@ if (isset($_SERVER["HTTP_REFERER"]) && preg_match('/http:\/\/www.motojunkyard.co
             }
         }
     }
-    
-    if (isset($formValue["thought"]) && isset($formValue["category"]) && isset($formValue["latitude"]) && isset($formValue["longitude"])) {
-
+    if (isset($_SESSION["login"]) && isset($formValue["visibility"]) && isset($formValue["thought"]) && strlen($formValue["thought"])>3 && isset($formValue["category"]) && strlen($formValue["category"])>3 && isset($formValue["latitude"]) && isset($formValue["longitude"])) {
         //max 150chars per thought;
         $thought = substr($formValue["thought"], 0, 150);
         
         //todo check strlen
         if (is_numeric($formValue["latitude"]) && is_numeric($formValue["longitude"])) {
             //do add to db query
-            mysqli_query($conn,"insert into gpsthoughts (thought, category,latitude,longitude) 
-                                values ('$thought','$formValue[category]','$formValue[latitude]','$formValue[longitude]')");
-            echo "posted!"; //do something go to map?
+            if($formValue["visibility"]=="1"){
+                $visibility="false";
+            }else{
+                $visibility="true";
+            }
+            $userid=$_SESSION["userid"];
+            mysqli_query($conn,"insert into gpsthoughts (userid, visibility, thought, category,latitude,longitude) 
+                                values ('$userid','$visibility','$thought','$formValue[category]','$formValue[latitude]','$formValue[longitude]')");
+            echo "posted"; //do something go to map?
         }
+    }else{
+        echo "error";
     }
 }
 ?>

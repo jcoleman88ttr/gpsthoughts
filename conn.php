@@ -1,5 +1,5 @@
 <?
-
+session_start();
 #database
 $dbhost = 'localhost';
 $dbuser = 'gpsthoughts';
